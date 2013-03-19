@@ -8,6 +8,15 @@ Install the gem:
 
     $ gem install gpgcrypt
 
+## Usage Template
+Encrypting:
+
+    $ gpgcrypt message public_key
+
+Decrypting:
+
+    $ gpgcrypt encrypted_message private_key
+
 ## Usage
 
 Have your partner generate a public/private key pair (You may have already done this).  
@@ -24,6 +33,21 @@ Or have your partner decrypt a message of yours using your own private key:
 
     $ gpgcrypt encrypted_message.txt your_private_key_rsa > message.txt
 
+
+## Alternate Usage
+
+You can alternatively specify a URL to public keys or messages
+
+Encrypting:
+
+    $ gpgcrypt message.txt github.com/TheNotary/pgp/raw
+    Your message has been pastebin'd to http://pastebin.com/lkajds;lkfjsdaf
+    
+Decrypting:
+
+    $ gpgcrypt http://pastebin.com/lkajds;lkfjsdaf ~/.ssh/id_rsa
+    
+    
 
 ## Contributing
 
