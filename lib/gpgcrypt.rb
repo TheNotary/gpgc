@@ -1,10 +1,11 @@
 require 'gibberish'
+require 'pry'
 
 require "gpgcrypt/version"
 
-module Gpgcrypt
+module GpgCrypt
   
-  def encrypt_or_decrypt(*args)
+  def self.encrypt_or_decrypt(*args)
     code_should_be_encrypted = scan_if_encrypted_message(args[0])
     
     if code_should_be_encrypted
@@ -14,34 +15,39 @@ module Gpgcrypt
     end
   end
   
-  # string1 = message_string
-  # string2 = private_key_string
+  # @param [string] message
   #
-  def encrypt(*args)
-    message_string = args[0]
-    private_key_string = File.open(args[1]).read    # read the file specified as the key...
-    
-    priv_key = OpenSSL::PKey::RSA.new(private_key_string)  # parse the string into an RSA object
+  # @param [string] public_key
+  #
+  # @return [string] encrypted
+  #
+  def self.encrypt(message, public_key)
+    message_string = message
+    public_key_string = public_key
     
     # encrypt the message
-    cipher = Gibberish::RSA.new(priv_key)
+    cipher = Gibberish::RSA.new(public_key_string)
     encrypted_message = cipher.encrypt(message_string)
-    encrypted_message
   end
   
-  def decrypt(*args)
-    message_string = args[0]
-    public_key_string = File.open(args[1]).read    # read the file specified as the key...
-    
-    pub_key  = OpenSSL::PKey::RSA.new(public_key_string)  # parse the string into an RSA key object
+  # @param [string] message
+  #
+  # @param [string] public_key
+  #
+  # @return [string] encrypted
+  #
+  def self.decrypt(encrypted_message, private_key)
+    message_string = encrypted_message
+    private_key_string = private_key
     
     # decrypt the message
-    dec_cipher = Gibberish::RSA.new(pub_key)
+    dec_cipher = Gibberish::RSA.new(private_key_string)
     decrypted_message = dec_cipher.decrypt(message_string)
   end
   
   
   def scan_if_encrypted_message(string)
-    return true
+    true
   end
+  
 end
