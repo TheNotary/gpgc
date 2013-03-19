@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require 'gpgcrypt'
+
+
+class GpgCryptRunner << Thor
+  default_task :help
+  
+  desc "help", "Explains the gem's usage on the command line."
+  def help
+    puts GpgCrypt.help
+  end
+  
+end
+
+GpgCryptRunner.start
