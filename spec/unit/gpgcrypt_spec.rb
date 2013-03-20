@@ -46,6 +46,7 @@ describe GpgCrypt do
   #
   it "should convert ssh keys into openssl keys", :current => true do
     key = GpgCrypt.convert_openssh_public_key_to_openssl(@ssh_pub_key)
+    key.should eq @pub_key
   end
   
   it "should be able to determine whether it should encrypt or decrypt something" do
