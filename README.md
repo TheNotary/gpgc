@@ -47,7 +47,16 @@ Decrypting:
 
     $ gpgcrypt http://pastebin.com/lkajds;lkfjsdaf ~/.ssh/id_rsa
     
+
+
+Later, you will be able to add other people's public keys to your ~/.gpgc folder.  Then you will be able to set their key as the default key.   
+
+    $ gpgc --save-key pastebin.com/raw/;laksjdflkjdf joe
+    $ gpgc --converse-with ~/.gpgc/joe
+    $ gpgc "Hey, let me know when you've made the finishing touches."
     
+
+
 
 ## Contributing
 
