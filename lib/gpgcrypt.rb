@@ -10,7 +10,14 @@ module GpgCrypt
   def self.encrypt_or_decrypt(*args)
     key_data = File.read(args[1]) #if File.exists
     key_type = get_key_type?(key_data)  # args[1] is either a public key or a private key...
-    #binding.pry
+    
+    # convert_key_to_pem_format
+    if key_type == :open_ssh
+      key_data = convert_openssh_public_key_to_openssl(key_data)
+      key_type = get_key_type?(key_data)    # if this fails, we should set key_type to :incompatible
+    end
+    
+    # get_message_data  decide where to read a file as the message, or use the first param
     if File.exist? args[0]
       message_data = File.read(args[0])
     else
@@ -22,8 +29,8 @@ module GpgCrypt
       encrypt(message_data, key_data)
     when :private
       decrypt(message_data, key_data)
-    when :incompatible
-      puts "The key entered was niether a public nor private key.  Check that you passed in a proper key as the second parameter."
+    else  # :incompatible or even possibly :open_ssh if something odd happens
+      puts "The key entered was niether a public nor private key.  Check that you passed in a proper path to a key as the second parameter."
     end
   end
   
@@ -69,6 +76,7 @@ module GpgCrypt
     hlp += "To decrypt a message: \n  Supply a path to a file containing an encrypted message and a private key.\n\n"
     hlp += "Soon you'll be able to export a public key from your private key and automatically pastebin it so others can message you.\n\n"
     hlp += "As an added feature, someday you will be able to specify pastebin links to encrypted messages and public keys"
+    hlp
   end
   
   
@@ -89,7 +97,7 @@ module GpgCrypt
     false
   end
   
-  def self.convert_openssh_public_key_to_openssl(public_key_string)
+  def self.convert_openssh_public_key_to_openssl(public_key_string, check_key_type = true)
     return public_key_string if get_key_type?(public_key_string) == :public
     
     # return public_key_string if true
@@ -106,8 +114,12 @@ module GpgCrypt
     return openssl_key
   end
   
+  
   def self.get_key_type?(string)
-    key_type = :incompatible
+    valid_private_key = :incompatible
+    
+    return :open_ssh if string =~ /^ssh-rsa/
+    
     begin
       k = OpenSSL::PKey::RSA.new(string)
       if k.private?
