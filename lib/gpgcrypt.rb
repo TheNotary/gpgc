@@ -37,8 +37,6 @@ module GpgCrypt
     message_string = message
     public_key_string = public_key
     
-    public_key_string = convert_openssh_public_key_to_openssl(public_key_string)
-    
     # encrypt the message
     cipher = Gibberish::RSA.new(public_key_string)
     encrypted_message = cipher.encrypt(message_string)
@@ -92,13 +90,19 @@ module GpgCrypt
   end
   
   def self.convert_openssh_public_key_to_openssl(public_key_string)
-    return public_key_string if true
+    return public_key_string if get_key_type?(public_key_string) == :public
+    
+    # return public_key_string if true
     temp_file_path = '/tmp/gpgcrypt_pubtest'
     File.open(temp_file_path, "w+") do |f|
       f.puts public_key_string
     end
+    File.chmod(0600, temp_file_path)
     
+    # binding.pry
+    #openssl_key = `openssl rsa -in #{temp_file_path} -out pub.der -outform pem -pubout`
     openssl_key = `ssh-keygen -f #{temp_file_path}  -e -m pem`
+    File.delete(temp_file_path)
     return openssl_key
   end
   
