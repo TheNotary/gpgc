@@ -38,7 +38,7 @@ module GpgCrypt
   #
   # @param [string] public_key
   #
-  # @return [string] encrypted
+  # @return [string] encrypted message
   #
   def self.encrypt(message, public_key)
     message_string = message
@@ -49,11 +49,11 @@ module GpgCrypt
     encrypted_message = cipher.encrypt(message_string)
   end
   
-  # @param [string] message
+  # @param [string] encrypted message
   #
-  # @param [string] public_key
+  # @param [string] public key in PEM format
   #
-  # @return [string] encrypted
+  # @return [string] decrypted message
   #
   def self.decrypt(encrypted_message, private_key)
     message_string = encrypted_message
