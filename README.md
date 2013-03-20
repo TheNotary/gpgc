@@ -29,7 +29,7 @@ And then use gpgcrypt to encrypt a message using your partner's public key:
 
     $ gpgcrypt message.txt public_key_of_recipient_rsa.pub > encrypted_message.txt
 
-Or have your partner decrypt a message of yours using your own private key:
+Or have your partner decrypt a message of yours using his own private key:
 
     $ gpgcrypt encrypted_message.txt your_private_key_rsa > message.txt
 
