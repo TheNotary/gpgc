@@ -5,6 +5,7 @@ require 'spec_helper'
 describe GpgCrypt do
   
   before :each do
+    @ssh_pub_path = 'spec/dummy/ssh_pub_key'
     @pub_path = "spec/dummy/pub_key"
     @priv_path = "spec/dummy/priv_key"
     @msg_path = "spec/dummy/msg"
@@ -47,6 +48,11 @@ describe GpgCrypt do
   it "should convert ssh keys into openssl keys", :current => true do
     key = GpgCrypt.convert_openssh_public_key_to_openssl(@ssh_pub_key)
     key.should eq @pub_key
+  end
+  
+  it "Should encrypt the file even if it's an ssh public key file that's supplied" do
+    enc = GpgCrypt.encrypt_or_decrypt(@msg_path, @ssh_pub_path)
+    GpgCrypt.encrypt_or_decrypt(enc, @priv_path).should eq File.read(@msg_path)
   end
   
   it "should be able to determine whether it should encrypt or decrypt something" do
