@@ -10,6 +10,10 @@ if ARGV[0].nil? or ARGV[0].downcase.chomp.strip =~ /^(\-|\-\-)help$/ or ARGV[0] 
   puts GpgCrypt.help
 elsif ARGV[0].downcase.chomp.strip == "export"
   # TODO
+elseif ARGV[0].downcase.chomp.strip == "--save-key"
+  puts "The feature hasn't yet been implemented."
+elseif ARGV[0].downcase.chomp.strip == "--converse-with"
+  puts "The feature hasn't yet been implemented."
 elsif ARGV.count != 2
   puts "You need to pass in two parameters, a path to a msg and a path to an RSA key."
 else
