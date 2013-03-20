@@ -34,7 +34,7 @@ Or have your partner decrypt a message of yours using your own private key:
     $ gpgcrypt encrypted_message.txt your_private_key_rsa > message.txt
 
 
-## Alternate Usage
+## Alternate Usage (not yet implemented!)
 
 You can alternatively specify a URL to public keys or messages
 
