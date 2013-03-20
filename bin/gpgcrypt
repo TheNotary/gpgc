@@ -1,17 +1,42 @@
 #!/usr/bin/env ruby
 
-require 'thor'
+#require 'thor'
+require 'pry'
 require 'gpgcrypt'
 
 
-class GpgCryptRunner << Thor
+
+if ARGV[0].nil? or ARGV[0].downcase.chomp.strip =~ /^(\-|\-\-)help$/ or ARGV[0] == ""   # regex captures help, -help, or --help.
+  puts GpgCrypt.help
+elsif ARGV[0].downcase.chomp.strip == "export"
+  # TODO
+elsif ARGV.count != 2
+  puts "You need to pass in two parameters, a path to a msg and a path to an RSA key."
+else
+  puts GpgCrypt.encrypt_or_decrypt(ARGV[0], ARGV[1])
+end
+
+
+
+
+
+
+=begin
+class GpgCryptRunner < Thor
   default_task :help
   
   desc "help", "Explains the gem's usage on the command line."
   def help
+    binding.pry
+    puts $my_args
     puts GpgCrypt.help
   end
+  
+  #desc "encrypt/ Decrypt", "either decrypts or encrypts something based on whether u supply a pub/priv key."
+  #def *args
   
 end
 
 GpgCryptRunner.start
+
+=end
